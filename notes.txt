@@ -1,0 +1,50 @@
+THE CRUD OPERTAIONS FUNCTIONS :
+
+1. CREATE :
+
+the basic ways of creating documents in monogoose:
+    1) const newTour = new Tour({});
+       newTour.save()  
+    2) const newTour = await Tour.create(req.body);
+    3) Tour.insertMany([array of objects])
+    
+in mongo DB we use insertOne and insertMany 
+db.(collectionName).insertOne({})
+db.(collectionName).insertMany([array of objects])
+
+
+2) read (querying) :
+Tour.find()
+Tour.find({filter object})
+Tour.findById()
+
+for example give me the tours that are less than 500
+Tour.find({price : {$lt:500}}) 
+{$lt:500} : $lt is an operator , there are many operators like lt,lte,gt,gte,or,and.....
+
+in mongo DB we use the same function find()
+
+3) update :
+
+    Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    or we can use 
+    Tour.updateOne(
+      { name: 'The Jungle Safari' },    // Filter object
+      { $set: { price: 650 } }          // Update
+    );
+
+    Tour.updateMany(
+      { name: 'The Jungle Safari' },    // Filter object
+      { $set: { price: 650 } }          // Update
+    );
+
+4) delete :
+
+  Tour.findByIdAndDelete(req.params.id);
+  Tour.deleteOne({filter Object})
+  Tour.deleteMany({filter Object})
+
