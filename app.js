@@ -16,6 +16,7 @@ const reviewRouter = require('./dev-data/routes/reviewRoutes');
 const viewRouter = require('./dev-data/routes/viewRoutes');
 const bookingRouter = require('./dev-data/routes/bookingRoutes');
 
+// start the express app
 const app = express();
 
 // MIDDLEWARE
