@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -95,9 +96,11 @@ app.use(
 // NOTE : if we declare the middleWare function after the route handler it will never be executed because
 // the cycle is already ended .
 
+app.use(compression());
+
 // some testing middlewares
 app.use((req, res, next) => {
-  console.log('hello form the middleWare !!');
+  // console.log('hello form the middleWare !!');
   next();
 });
 

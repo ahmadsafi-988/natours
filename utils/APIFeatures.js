@@ -22,7 +22,6 @@ class APIFeatures {
     if (this.queryString.sort) {
       //  if we have more than a field we want to sort by them
       const sortByMulitple = this.queryString.sort.split(',').join(' ');
-      console.log(this.queryString.sort);
       // eslint-disable-next-line no-unneeded-ternary
       const sortBy = sortByMulitple ? sortByMulitple : this.queryString.sort;
       this.query = this.query.sort(sortBy);

@@ -70,9 +70,6 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
-
   // 1) throw an error if the user sends the password or confirm password
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -84,15 +81,11 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) filter the body
   const filteredBody = filterBodyFunc(req.body, 'name', 'email');
   if (req.file) filteredBody.photo = req.file.filename;
-  console.log(filteredBody);
   // 3) update the data
-  console.log('--------------------------------------------------------------');
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
   });
-
-  console.log('--------------------------------------------------------------');
 
   // 4) send the response along with the updated one
   res.status(200).json({

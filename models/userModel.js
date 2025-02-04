@@ -108,8 +108,6 @@ userSchema.methods.changePasswordAfter = function (timeStamp) {
       this.changePasswordAt.getTime() / 1000,
       10,
     );
-    console.log('time stamp = ', timeStamp);
-    console.log('change password at = ', changePasswordAt);
 
     return changePasswordAt > timeStamp;
   }
@@ -126,9 +124,6 @@ userSchema.methods.createPasswordResetToken = function () {
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
-
-  console.log(resetToken);
-  console.log(this.passwordResetToken);
 
   this.passwordResetExpires = Date.now() + 5 * 60 * 1000;
 

@@ -83,7 +83,6 @@ exports.logIn = catchAsync(async (req, res, next) => {
   // 3. we need to check if the email exists (in our DB) and the password is correct
   const user = await User.findOne({ email: email }).select('+password');
 
-  console.log(user);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError(' incorrect email or password', 401));
   }
@@ -121,11 +120,9 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  console.log(typeof token);
   // 2) verfication token
   // note , there are two cases if we have get an error , 1) invalid token 2)the token is expired
   const decoded = await promisfiedVerify(token, process.env.JWT_SECRET);
-  console.log(decoded);
 
   // 3) check if the user still exists
   const currentUser = await User.findById(decoded.id);
@@ -179,7 +176,6 @@ exports.isLoggedIn = async (req, res, next) => {
 
       // this var is accessable in OUR PUG TEMPLATE
       res.locals.user = currentUser;
-      console.log('here : ', res.locals.user);
       return next();
     } catch (err) {
       return next();
@@ -226,7 +222,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   const message = `forgot your password , click the following link ${resetURL} , if you dont forget your password
   please ignore this email `;
 
-  console.log(resetToken);
   try {
     await new Email(user, resetURL).sendPasswordReset();
     // send the response to end the req-res cycle
@@ -235,7 +230,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
       message: 'token is sent to the email',
     });
   } catch (err) {
-    console.log(err);
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
 
@@ -247,15 +241,12 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  console.log('heere');
-
   // 1) get the token and encrypt it
   const hashedToken = crypto
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
 
-  console.log(req.params.token);
   // 2) get the user that based on the token and check if the token is still valid
 
   const user = await User.findOne({
@@ -283,9 +274,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) get the user with password
   const user = await User.findById(req.user.id).select('+password');
 
-  console.log(req.user.id);
-  console.log(req.body);
-  console.log(user);
   // 2) check if the posted password is correct
   if (!(await user.correctPassword(req.body.password, user.password))) {
     return next(
